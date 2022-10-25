@@ -2,6 +2,7 @@ package repository
 
 import db.DataBaseManager
 import models.Departamento
+import java.util.UUID
 
 class DepartamentoRepository: IDepartamentoRepository {
     private val db: DataBaseManager = DataBaseManager
@@ -15,10 +16,10 @@ class DepartamentoRepository: IDepartamentoRepository {
     }
 
     override fun create(entity: Departamento): Departamento {
-        val query: String = """INSERT INTO departamentos(idDepartamento = ?, nombreDepartamento, presupuesto)
+        val query: String = """INSERT INTO departamentos(id_dep , nombreDepartamento, presupuesto)
             VALUES (?, ?, ?)""".trimIndent()
         db.open()
-        db.insert(query, entity.nombreDepartamento, entity.presupuesto)
+        db.insert(query, entity.idDepartamento, entity.nombreDepartamento, entity.presupuesto)
         db.close()
         return entity
     }
@@ -31,7 +32,7 @@ class DepartamentoRepository: IDepartamentoRepository {
         result?.let {
             while(result.next()) {
                 val departamento = Departamento(
-                    idDepartamento = it.getInt("idDepartamento"),
+                    idDepartamento = it.getInt("id_dep"),
                     nombreDepartamento = it.getString("nombreDepartamento"),
                     presupuesto = it.getDouble("presupuesto")
                     )
@@ -51,7 +52,7 @@ class DepartamentoRepository: IDepartamentoRepository {
     }
 
     override fun delete(id: Int): Boolean {
-        val query = "DELETE from departamentos WHERE id = ?"
+        val query = "DELETE from departamentos WHERE id_dep = ?"
         db.open()
         db.delete(query, id)
         db.close()
@@ -59,14 +60,14 @@ class DepartamentoRepository: IDepartamentoRepository {
     }
 
     override fun findById(id: Int): Departamento? {
-        val query = "SELECT id FROM departamentos WHERE id = ?"
+        val query = "SELECT id FROM departamentos WHERE id_dep = ?"
         db.open()
         val result = db.select(query, id)
         var departamento: Departamento? = null
         result?.let {
             if (result.next()) {
                 departamento = Departamento(
-                    idDepartamento = it.getInt("idDepartamento"),
+                    idDepartamento = it.getInt("id_dep"),
                     nombreDepartamento = it.getString("nombreDepartamento"),
                     presupuesto = it.getDouble("presupuesto")
 

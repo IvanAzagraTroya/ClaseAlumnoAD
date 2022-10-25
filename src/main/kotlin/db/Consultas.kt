@@ -17,12 +17,12 @@ class Consultas(
         var empleadosPorDep = empleadosController.getEmpleados()
             .sortedBy { it.fechaAdmision }.sortedBy { it.depId}
 
-        var empleadoMenorVeterania = empleadosPorFecha.minBy { it.fechaAdmision }
-        var empleadoMayorVeterania = empleadosPorFecha.maxBy { it.fechaAdmision}
+        var empleadoMayorVeterania = empleadosPorFecha.minBy { it.fechaAdmision }
+        var empleadoMenorVeterania = empleadosPorFecha.maxBy { it.fechaAdmision}
         println("Empleado menor: $empleadoMenorVeterania")
         println("Empleado mayor: $empleadoMayorVeterania")
-        var empleadoMenorVeteraniaDep = empleadosPorDep.minBy { it.fechaAdmision }
-        var empleadoMayorVeteraniaDep = empleadosPorDep.maxBy { it.fechaAdmision }
+        var empleadoMayorVeteraniaDep = empleadosPorDep.minBy { it.fechaAdmision }
+        var empleadoMenorVeteraniaDep = empleadosPorDep.maxBy { it.fechaAdmision }
         println("empleado menor por departamento: $empleadoMenorVeteraniaDep")
         println("empleado mayor por departamento: $empleadoMayorVeteraniaDep")
 
@@ -31,7 +31,7 @@ class Consultas(
         var mediaPresupuesto = departamentos.map { it.presupuesto }.sum().div(departamentos.size)
         println("media: $mediaPresupuesto")
 //        todo número de empleados que tiene cada departamento
-        var empleadosDepartamento = empleadosPorDep.groupBy { it.depId }.count()
+        var empleadosDepartamento = empleadosPorDep.groupBy { it.depId }.map { it.value.size }
         println("Número de empleados por departamento: $empleadosDepartamento")
 //        todo empleados que trabajan en el departamento con más presupuesto
         var depPresupuesto = departamentos.sortedBy { it.idDepartamento }.maxOf { it.presupuesto }
